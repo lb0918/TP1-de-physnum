@@ -1,7 +1,4 @@
 import numpy as np
-a = 0
-while True is True:
-    for x in range(10):
-        if x > 4:
-            print(x)
-            break
+r = np.zeros((2,3))
+r[1,2] = 4
+print(r[1])

@@ -102,7 +102,7 @@ tranches_os = 2
     #    break
 
 
-
+print(trap_eau(1), trap_eau(2))
 
 '''Romberg eau'''
 def romberg_eau(t):
@@ -110,7 +110,7 @@ def romberg_eau(t):
     for x in range(0, t):
         R[x, 0] = trap_eau(2**x)
         for j in range(0, x):
-            R[x, j+1] = R[x, j] + (1/(4**j)-1) * (R[x,j]-R[x-1,j])
+            R[x, j+1] = R[x, j] + (1/((4**(j+1))-1)) * (R[x,j]-R[x-1,j])
     return R
 '''Romberg os'''
 def romberg_os(t):
@@ -118,20 +118,42 @@ def romberg_os(t):
     for x in range(0, t):
         R[x, 0] = trap_os(2**x)
         for j in range(0, x):
-            R[x, j+1] = R[x, j] + (1/(4**j)-1) * (R[x,j]-R[x-1,j])
+            R[x, j+1] = R[x, j] + (1/((4**(j+1))-1)) * (R[x,j]-R[x-1,j])
     return R
 print(romberg_eau(3))
 tranches_romberg_eau = 3
+# while True is True:
+#     end = False
+#     n = tranches_romberg_eau
+#     tranches_romberg_eau += 1
+#     R = romberg_eau(n)
+#     #print(R)
+#     for i in range(n):
+#         for m in range(1,i):
+#             eps = (1/(4**m-1))*(R[i,m]-R[i-1,m])
+#             print(eps, tranches_romberg_eau)
+#             if abs(eps) < 2.2e-16:
+#                 print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_eau))
+#                 end = True
+#     if end:
+#         break
+
 while True is True:
+    end = False
     n = tranches_romberg_eau
     tranches_romberg_eau += 1
     R = romberg_eau(n)
-    #print(R)
-    for i in range(n):
-        for m in range(1,i):
-            eps = (1/(4**m-1))*(R[i,m]-R[i-1,m])
-            print(eps, tranches_romberg_eau)
-            if abs(eps) < 2.2e-16:
-                print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_eau))
-                break
+    print(R)
+    print(R[n-1])
+    print(len(R[n-1]))
+    i = R[n-1]
+    print(i)
+    for m in range(len(i)):
+        eps = (1/(4**(m+1)-1))*(i[m]-R[n-2][m])
+        print(eps, n)
+        if abs(eps) < 2.2e-16:
+            print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_eau))
+            end = True
+    if end:
+        break
     
