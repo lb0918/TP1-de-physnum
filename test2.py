@@ -1,8 +1,6 @@
-import numpy as numpy
-
-
 import numpy as np
-
+import matplotlib.pyplot as plt
+import time
 
 
 T_i = 150*1.602e-13
@@ -67,42 +65,33 @@ print('''La portée des protons dans l'eau est de '''+str(trap_eau(2000))+''' [K
 print('''La portée des protons dans l'eau est de '''+str(trap_eau(10000))+''' [Kg/J*m^2]''')
 tranches_eau = 2
 tranches_os = 2
-#while True is True:
-    #I_ii = trap_os(tranches_os*2)
-    #I_i = trap_os(tranches_os)
-    #eps = (1/3)*(I_ii-I_i)
-    #tranches_os *= 2
-    #print(eps)
-    #print(tranches_os)
-    #if abs(eps) < 2.2e-16:
-    #    print('''Le nombre de tranches os est de '''+ str(2*(tranches_os-1)))
-    #    break
 
-#while True is True:
-    #I_ii = trap_eau(tranches_eau*2)
-    #I_i = trap_eau(tranches_eau)
-    #eps = (1/3)*(I_ii-I_i)
-    #tranches_eau *= 2
-    #print(eps)
-    #print(tranches_eau)
-    #if abs(eps) < 2.2e-16:
-    #    print('''Le nombre de tranches eau est de '''+ str(2*(tranches_eau-1)))
-    #    print(trap_eau((tranches_eau-1)*2))
-    #    print(trap_eau(4355))
-    #    break
-#while True is True:
-    #I_ii = trap_os(tranches_os*2)
-    #I_i = trap_os(tranches_os)
-    #eps = (1/3)*(I_ii-I_i)
-    #tranches_os *= 2
-    #print(eps)
-    #print(tranches_os)
-    #if abs(eps) < 2.2e-16:
-    #    print('''Le nombre de tranches os est de '''+ str(2*(tranches_os-1)))
-    #    break
+"""Précision trapèze"""
+while True is True:
+    I_ii = trap_eau(tranches_eau*2)
+    I_i = trap_eau(tranches_eau)
+    eps = (1/3)*(I_ii-I_i)
+    tranches_eau *= 2
+    print(eps)
+    print(tranches_eau)
+    if abs(eps) < 2.2e-16:
+       print('''Le nombre de tranches eau est de '''+ str(2*(tranches_eau-1)))
+       print(trap_eau((tranches_eau-1)*2))
+       print(trap_eau(4355))
+       break
+while True is True:
+    I_ii = trap_os(tranches_os*2)
+    I_i = trap_os(tranches_os)
+    eps = (1/3)*(I_ii-I_i)
+    tranches_os *= 2
+    print(eps)
+    print(tranches_os)
+    if abs(eps) < 2.2e-16:
+       print('''Le nombre de tranches os est de '''+ str(2*(tranches_os-1)))
+       break
 
 
-print(trap_eau(1), trap_eau(2))
+
 
 '''Romberg eau'''
 def romberg_eau(t):
@@ -122,24 +111,60 @@ def romberg_os(t):
     return R
 print(romberg_eau(3))
 tranches_romberg_eau = 3
+tranches_romberg_os = 3
+
+"""Précision romberg"""
 # while True is True:
 #     end = False
 #     n = tranches_romberg_eau
 #     tranches_romberg_eau += 1
 #     R = romberg_eau(n)
-#     #print(R)
-#     for i in range(n):
-#         for m in range(1,i):
-#             eps = (1/(4**m-1))*(R[i,m]-R[i-1,m])
-#             print(eps, tranches_romberg_eau)
-#             if abs(eps) < 2.2e-16:
-#                 print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_eau))
-#                 end = True
+#     print(R)
+#     print(R[n-1])
+#     print(len(R[n-1]))
+#     i = R[n-1]
+#     print(i)
+#     for m in range(len(i)):
+#         eps = (1/(4**(m+1)-1))*(i[m]-R[n-2][m])
+#         print(eps, n)
+#         if abs(eps) < 2.2e-16:
+#             print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_eau))
+#             end = True
 #     if end:
 #         break
 
+
+# while True is True:
+#     end = False
+#     n = tranches_romberg_os
+#     tranches_romberg_os += 1
+#     R = romberg_os(n)
+#     print(R)
+#     print(R[n-1])
+#     print(len(R[n-1]))
+#     i = R[n-1]
+#     print(i)
+#     for m in range(len(i)):
+#         eps = (1/(4**(m+1)-1))*(i[m]-R[n-2][m])
+#         l2.append(abs(eps))
+#         print(eps, n)
+#         if abs(eps) < 2.2e-16:
+#             print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_os))
+#             end = True
+#     if end:
+#         break
+
+lt = []
+lr = []
+l1 = []
+l2 = []
+rp = []
+r1 = []
+r2 = []
+
 while True is True:
     end = False
+    start = time.time()
     n = tranches_romberg_eau
     tranches_romberg_eau += 1
     R = romberg_eau(n)
@@ -147,13 +172,58 @@ while True is True:
     print(R[n-1])
     print(len(R[n-1]))
     i = R[n-1]
+    lr.append(i[-2])
     print(i)
-    for m in range(len(i)):
-        eps = (1/(4**(m+1)-1))*(i[m]-R[n-2][m])
-        print(eps, n)
-        if abs(eps) < 2.2e-16:
-            print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_eau))
-            end = True
+    eps = (1/(4**(n-1)-1))*(i[n-2]-R[n-2][n-2])
+    l2.append(abs(eps))
+    print(eps, n)
+    if abs(eps) < 2.2e-16:
+        end1 = time.time()
+        print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_eau-1))
+        print(end1 - start)
+        end = True
     if end:
         break
-    
+
+
+
+
+while True is True:
+    end = False
+    start = time.time()
+    n = tranches_romberg_os
+    tranches_romberg_os += 1
+    R = romberg_os(n)
+    print(R)
+    print(R[n-1])
+    print(len(R[n-1]))
+    i = R[n-1]
+    print(i)
+    eps = (1/(4**(n-1)-1))*(i[n-2]-R[n-2][n-2])
+    r2.append(abs(eps))
+    print(eps, n)
+    if abs(eps) < 2.2e-16:
+        end = time.time()
+        print('''Le nombre de tranche avec romberg est '''+str(tranches_romberg_os-1))
+        print(end - start)
+        end = True
+    if end:
+        break
+
+
+for x in range(len(l2)):
+    l1.append(x)
+
+plt.plot(l1,l2)
+plt.yscale('log')
+plt.show()
+
+for x in range(len(r2)):
+    r1.append(x)
+
+plt.plot(r1,r2)
+plt.yscale('log')
+plt.show()
+
+
+
