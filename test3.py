@@ -5,8 +5,7 @@ from scipy.stats import skew
 from scipy import integrate
 import timeit
 
-for x in range(150,-1,-1):
+a=np.linspace(150,0,1000)
+print(a)
+for x in a:
     print(x)
-l=[4,2,2,345,23]
-l.sort()
-print(l)
